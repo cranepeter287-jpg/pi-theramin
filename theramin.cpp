@@ -1,8 +1,8 @@
 /**********************************************************************
-* Filename    : UltrasonicRanging.c
-* Description : Get distance via UltrasonicRanging sensor
-* Author      : www.freenove.com
-* modification: 2019/12/27
+* Filename    : Theramin-Pi.c
+* Description : Theramin
+* Author      : Pete Crane
+* modification: 10/22/2026
 **********************************************************************/
 #include <wiringPi.h>
 #include <stdio.h>
@@ -24,7 +24,7 @@ pthread_mutex_t lock;
 unsigned long pingTime=0;
 pthread_t thread1,thread2;
 
-
+// Read Sonar distance thread
 void* getSonar(void* arg)
 {       
     while(1) 
@@ -42,7 +42,7 @@ void* getSonar(void* arg)
     return NULL;
 }
 
-// Send square wave to buzzer. Freq based on pulse time
+// Send square wave to buzzer thread. Freq based on pulse time
 void * buzzerOut(void* arg)
 {    
     while (1) 
@@ -53,7 +53,8 @@ void * buzzerOut(void* arg)
         delay(10 + pingTime);
     }
 }       
-        
+
+// Main
 int main(){
     void* res;
     

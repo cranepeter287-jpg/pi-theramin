@@ -23,7 +23,7 @@ int pulseIn(int pin, int level, int timeout);
 //Global vars
 pthread_mutex_t lock;
 unsigned long pingTime=0;
-pthread_t thread1;
+pthread_t thread1,thread2;
 
 
 void* getSonar(void* arg){   //get the measurement result of ultrasonic module with unit: cm
@@ -46,13 +46,15 @@ void* getSonar(void* arg){   //get the measurement result of ultrasonic module w
 
 
 void * buzzerOut(void* arg)
-{
-    
-    digitalWrite(BUZZER_OUT_PIN,LOW);
-    
+{    
     while (1) 
     {
-        
+        digitalWrite(BUZZER_OUT_PIN,LOW);
+        delay(10 + pingTime);
+        digitalWrite(BUZZER_OUT_PIN,HIGH);
+        delay(10 + pingTime);
+    }
+}       
         
 int main(){
     void* res;
@@ -72,14 +74,10 @@ int main(){
     }   
     
     pthread_create(&thread1, NULL, getSonar, (void*)NULL);
+    pthread_create(&thread2, NULL, buzzerOut, (void*)NULL);
     
-     pthread_join(thread1, &res);
-    
-//   while(1){
-//       distance = getSonar();
-//       printf("The distance is : %.2f cm\n",distance);
-//        delay(1000);
-//    }  
+    pthread_join(thread1, &res);
+    pthread_join(thread2, &res);    
 
     printf("Main: Thread 1 returned %d\n", *(int*)res);
     return 0;
@@ -110,3 +108,4 @@ int pulseIn(int pin, int level, int timeout)
    micros = micros + (tn.tv_usec - t1.tv_usec);
    return micros;
 }
+

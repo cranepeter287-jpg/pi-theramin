@@ -9,14 +9,13 @@
 #include <sys/time.h>
 #include <pthread.h>
 
-
-
 #define trigPin 4       
 #define echoPin 5
 #define BUZZER_OUT_PIN  1
 #define MAX_DISTANCE 220        // define the maximum measured distance
 #define timeOut MAX_DISTANCE*60 // calculate timeout according to the maximum measured distance
 #define THREAD_MILLISEC_DELAY  100  // Polling delay in mSecs
+
 //function pulseIn: obtain pulse time of a pin
 int pulseIn(int pin, int level, int timeout);
 
@@ -26,9 +25,8 @@ unsigned long pingTime=0;
 pthread_t thread1,thread2;
 
 
-void* getSonar(void* arg){   //get the measurement result of ultrasonic module with unit: cm
-    
-//   float distance;
+void* getSonar(void* arg)
+{       
     while(1) 
     {
         pthread_mutex_lock(&lock);
@@ -44,7 +42,7 @@ void* getSonar(void* arg){   //get the measurement result of ultrasonic module w
     return NULL;
 }
 
-
+// Send square wave to buzzer. Freq based on pulse time
 void * buzzerOut(void* arg)
 {    
     while (1) 
